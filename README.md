@@ -64,6 +64,7 @@
     ◦ 点击运行按钮即可体验当前开发版本。
 
 项目结构
+```
 Assets/Scripts/
 ├──  Core
 │   ├── GameManager.cs          # 游戏总控制器
@@ -119,7 +120,7 @@ Assets/Scripts/
     ├── ParallaxBackground.cs   # 视差背景
     ├── Timer.cs                # 计时器工具
     └── Extensions.cs           # 扩展方法
-
+```
 开发团队
 
 • [你的名字]： 项目经理 & 主程序
