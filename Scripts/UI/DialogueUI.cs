@@ -1,4 +1,4 @@
-//对话系统UI
+//(可选)可保留作为对话界面更底层的UI元素类，或与DialogUIManager合并
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

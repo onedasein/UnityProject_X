@@ -1,4 +1,5 @@
 //UI管理器
+//负责管理DialogUIManager等UI组件的启用/禁用
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
