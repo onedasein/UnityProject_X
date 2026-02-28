@@ -24,16 +24,22 @@ public class PlayerMovement : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal");
         float moveY = Input.GetAxis("Vertical");
 
-        //计算移动方向
-        Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
+        //为动画计算强度
+        Vector2 rawInput = new Vector2(moveX, moveY);
+        float inputStrength = rawInput.sqrMagnitude;
 
+        //为移动计算方向
+        Vector2 moveDirection = rawInput.normalized;
+
+        //传递给动画
         animator.SetFloat("Horizontal", moveX);
         animator.SetFloat("Vertical", moveY);
-        animator.SetFloat("Speed", moveDirection.sqrMagnitude);
+        animator.SetFloat("Speed", inputStrength);
 
         
 
         //处理镜像翻转
+        //localScale局部缩放
         if (moveX < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1); //向左
@@ -43,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1); //向右
         }
         //应用移动
+        //刚体速度，由物理引擎处理
         rb.velocity = moveDirection * moveSpeed;
     }
 }
