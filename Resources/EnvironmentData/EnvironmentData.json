@@ -1,0 +1,49 @@
+{
+  "objects": [
+    {
+      "id": "door_left",
+      "name": "左侧门",
+      "textSequences": [
+        {
+          "id": "door_f1",
+          "text": "陈旧的木门，锁住了。",
+          "triggerCount": 1
+        },
+        {
+          "id": "door_f2",
+          "text": "锁住了。",
+          "triggerCount": 2
+        },
+        {
+          "id": "door_f3",
+          "text": "主人家锁住的门，还是不要好奇了……",
+          "triggerCount": 3
+        },
+        {
+          "id": "door_fn",
+          "text": "锁住了。",
+          "repeatAfter": 4
+        }
+      ],
+      "isLocked": true,
+      "requiresKey": false
+    },
+    {
+      "id": "bed",
+      "name": "床",
+      "textSequences": [
+        {
+          "id": "bed_f1",
+          "text": "暄软的床，上面还有你躺过的痕迹。",
+          "triggerCount": 1
+        },
+        {
+          "id": "bed_f2",
+          "text": "这里应该有个存档点",
+          "triggerCount": 2,
+          "triggersEvent": "show_save_menu"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+// 在 `InteractableObject.CheckHasItem()` 中被引用，需创建此管理器。

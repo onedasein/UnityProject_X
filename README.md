@@ -66,60 +66,56 @@
 项目结构
 ```
 Assets/Scripts/
-├──  Core
-│   ├── GameManager.cs          # 游戏总控制器
-│   ├── AudioManager.cs         # 音频管理器
-│   ├── UIManager.cs            # UI总管理器（**可负责管理DialogUIManager等UI组件的启用/禁用**）
-│   ├── SceneLoader.cs          # 场景加载器
-│   └── ManualManager.cs        # 文本手册管理器
+├── Core (核心管理器)
+│   ├── GameManager.cs              # 游戏全局状态、流程控制（如开始、暂停、结束游戏）。
+│   ├── AudioManager.cs             # 音频播放控制（背景音乐、音效）。
+│   ├── UIManager.cs                # UI总管理器，负责协调各个UI面板（如对话、菜单）的显示与隐藏。
+│   ├── SceneLoader.cs              # 场景加载与切换控制，可包含过渡效果。
+│   ├── ManualManager.cs            # 图鉴/手册管理器，管理游戏中解锁的背景故事、物品描述等叙事文本。
+│   └── EnvironmentTextManager.cs   # 环境交互文本管理器。集中管理从JSON加载的环境物体（如门、床）的交互文本序列
 │
-├──  Systems
-│   ├── InputSystem.cs          # 输入控制封装
-│   ├── SaveSystem.cs           # 存档系统
-│   ├── EventSystem.cs          # 事件系统
-│   └── PoolSystem.cs           # 对象池系统
+├── Systems (功能系统)
+│   ├── InputSystem.cs          # 输入控制封装，统一处理键盘、手柄等输入，并转换为游戏内事件。
+│   ├── SaveSystem.cs           # 存档/读档系统。需保存玩家状态、场景状态以及`InteractableObject`的交互次数。
+│   ├── EventSystem.cs          # 自定义事件系统。用于解耦脚本通信，例如处理“红纸首次被触摸”这类事件。
+│   ├── PoolSystem.cs           # 对象池系统，用于高效管理频繁生成/销毁的对象（如子弹、特效）。
+│   └── InventoryManager.cs     # 背包/道具管理器。
 │
-├──  GameTextSystem
-│   ├──  Base
-│   │   └── GameText.cs         # 文本基类
-│   ├──  Derived
-│   │   └── ... (文本派生类)
-│   └──  Data
-│       └── TextDataArray.cs
+├── Gameplay (核心玩法机制)
+│   ├── HealthSystem.cs         # 通用的生命值/属性系统，可供玩家、敌人等实体挂载。
+│   ├── DamageDealer.cs         # 伤害系统，处理攻击判定与伤害计算。
+│   ├── Collectible.cs          # 可收集物品（如金币、血包）的通用逻辑。
+│   ├── Checkpoint.cs           # 存档点/重生点逻辑。
+│   └── InteractableObject.cs   # 可交互物体基类。所有可交互物体（门、窗、NPC）的父类，定义通用交互逻辑、文本序列、条件检查和存档。
 │
-├──  Player
-│   ├── PlayerController.cs         # 玩家移动控制
-│   ├── PlayerStats.cs              # 玩家属性
-│   ├── PlayerAnimation.cs          # 玩家动画控制
-│   ├── PlayerCombat.cs             # 玩家战斗系统
-│   └── PlayerInteractionHandler.cs # 玩家交互控制
+├── Player (玩家相关)
+│   ├── PlayerController.cs             # 玩家移动、跳跃等基础控制。
+│   ├── PlayerStats.cs                  # 玩家专属属性（生命、能量、攻击力等）。
+│   ├── PlayerAnimation.cs              # 控制玩家角色动画状态机。
+│   ├── PlayerCombat.cs                 # 玩家攻击、技能等战斗逻辑。
+│   ├── PlayerInteractionHandler.cs     # （之前新增）玩家交互处理器，可能处理更上层的交互逻辑。
+│   └── PlayerInteractionDetector.cs    # 玩家交互检测器。通过射线检测玩家视线前方的可交互物体，并在按下按键（如F）时触发其`OnInteract`方法。
 │
-├──  Entities
-│   ├── EnemyController.cs      # 敌人AI基类
-│   ├── EnemyMelee.cs           # 近战敌人
-│   ├── EnemyRanged.cs          # 远程敌人
-│   └── NPC.cs                  # 继承自 Interactable 的具体实体类
+├── Entities (游戏实体)
+│   ├── EnemyController.cs      # 敌人AI基类，定义巡逻、索敌等通用行为。
+│   ├── EnemyMelee.cs           # 近战敌人，继承自EnemyController，实现近战攻击逻辑。
+│   ├── EnemyRanged.cs          # 远程敌人，继承自EnemyController，实现远程攻击逻辑。
+│   ├── NPC.cs                  # 非玩家角色，继承自InteractableObject，通常触发对话。
+│   ├── DoorInteractable.cs     # 可交互的门，继承自InteractableObject。实现“锁定”等门特有逻辑和多次交互的文本变化。
+│   └── WindowInteractable.cs   # 可交互的窗，继承自InteractableObject。实现带有图片展示和特定叙事文本的交互逻辑。
 │
-├──  Gameplay
-│   ├── HealthSystem.cs         # 通用生命值系统
-│   ├── DamageDealer.cs         # 伤害系统
-│   ├── Collectible.cs          # 可收集物品
-│   ├── Checkpoint.cs           # 存档点
-│   └── Interactable.cs         # 作为所有可交互物体的抽象基类，属于核心玩法机制
+├── UI (用户界面)
+│   ├── HUDController.cs        # 游戏内平视显示器（血条、分数、小地图等）。
+│   ├── MenuController.cs       # 主菜单、暂停菜单等界面控制。
+│   ├── DialogUIManager.cs      # 对话UI管理器。控制对话框的显示、隐藏，以及文本的逐字打印效果。
+│   ├── DialogueUI.cs           # （可选）对话UI的视图组件，负责具体UI元素的更新。
+│   └── ManualUI.cs             # 图鉴/手册的查看界面，从ManualManager获取数据并展示。
 │
-├──  UI
-│   ├── HUDController.cs        # 游戏内HUD
-│   ├── MenuController.cs       # 菜单控制
-│   ├── DialogUIManager.cs      # 对话界面的核心控制器
-│   ├── DialogueUI.cs           # (可选)可保留作为对话界面更底层的UI元素类，或与DialogUIManager合并
-│   ├── InventoryUI.cs          # 背包UI
-│   └── ManualUI.cs             # 图鉴/手册UI
-│
-└──  Utilities
-    ├── CameraFollow.cs         # 相机跟随
-    ├── ParallaxBackground.cs   # 视差背景
-    ├── Timer.cs                # 计时器工具
-    └── Extensions.cs           # 扩展方法
+└── Utilities (工具与扩展)
+    ├── CameraFollow.cs         # 相机跟随脚本，使相机平滑跟随玩家。
+    ├── ParallaxBackground.cs   # 2D视差背景效果控制。
+    ├── Timer.cs                # 通用的计时器工具类。
+    └── Extensions.cs           # 自定义的C#扩展方法集合。
 ```
 开发团队
 
